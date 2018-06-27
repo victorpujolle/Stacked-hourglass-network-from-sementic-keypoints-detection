@@ -31,7 +31,7 @@ Abstract:
 import sys
 sys.path.append('./')
 
-from hourglass_tiny import HourglassModel
+from hourglass_tiny_vic import HourglassModel
 from time import time, clock, sleep
 import numpy as np
 import tensorflow as tf
@@ -175,6 +175,7 @@ class PredictProcessor():
 			'prediction' node in TensorBoard.
 			In my defence, I implement it to compare computation times with numpy.
 		"""
+
 		with tf.name_scope(name):
 			shape = tensor.get_shape().as_list()
 			if debug:
@@ -185,7 +186,7 @@ class PredictProcessor():
 				resh = tf.reshape(tensor[-1,:,:,0], [-1])
 			if debug:
 				print(resh)
-			arg = tf.arg_max(resh,0)
+			arg = tf.argmax(resh,0)
 			if debug:
 				print(arg, arg.get_shape(), arg.get_shape().as_list())
 			joints = tf.expand_dims(tf.stack([arg // tf.to_int64(shape[1]), arg % tf.to_int64(shape[1])], axis = -1), axis = 0)
