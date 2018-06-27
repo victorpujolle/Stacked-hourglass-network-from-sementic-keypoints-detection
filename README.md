@@ -7,8 +7,8 @@ my internship in Postech. It is a three months intership in the robotic
 laboratory of Postech 
 
 
-TODO : implement the domain adversarial training on a stacked hourglass network
 
+TODO : implement the domain adversarial training on a stacked hourglass network
 
 ##Important papers
 
