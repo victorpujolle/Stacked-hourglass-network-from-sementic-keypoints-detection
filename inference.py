@@ -30,7 +30,7 @@ Abstract:
 import sys
 sys.path.append('./')
 
-from hourglass_tiny import HourglassModel
+from hourglass_tiny_dann import HourglassModel
 from time import time, clock
 import numpy as np
 import tensorflow as tf
@@ -152,7 +152,7 @@ class Inference():
 				
 
 if __name__ == '__main__':
-	infer=Inference(config_file = 'config.cfg', model = '../trained_networks/hg_test_5_200', yoloModel = 'YOLO_small.ckpt')
+	infer=Inference(config_file = 'config.cfg', model = '../trained_networks/hg_test_7_100', yoloModel = 'YOLO_small.ckpt')
 	val_path='../datasets/val_real'
 	result_path='../datasets/val_real_result'
 # 	val_path='datasets/val'
