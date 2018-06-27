@@ -1,0 +1,1 @@
+The shape of the domain layer (domain[self.nStack].shape) == (?,1,1,1)
