@@ -461,10 +461,10 @@ class HourglassModel():
 						if self.modif:
 							# TEST OF BATCH RELU
 							out[0] = self._conv_bn_relu(ll[0], self.outDim, 1, 1, 'VALID', 'out')
-							domain[0] = self._conv_bn_relu(flip_gradient(ll[0]), 1, tf.shape(ll[0])[1], 1, 'VALID', 'out')
+							#domain[0] = self._conv_bn_relu(flip_gradient(ll[0]), 1, tf.shape(ll[0])[1], 1, 'VALID', 'out')
 						else:
 							out[0] = self._conv(ll[0], self.outDim, 1, 1, 'VALID', 'out')
-							domain[0] = self._conv(flip_gradient(ll[0]), 1, tf.shape(ll[0])[1], 1, 'VALID', 'out')
+							#domain[0] = self._conv(flip_gradient(ll[0]), 1, tf.shape(ll[0])[1], 1, 'VALID', 'out')
 						out_[0] = self._conv(out[0], self.nFeat, 1, 1, 'VALID', 'out_')
 						sum_[0] = tf.add_n([out_[0], r3, ll_[0]], name='merge')
 					for i in range(1, self.nStack -1):
@@ -475,10 +475,10 @@ class HourglassModel():
 							ll_[i] = self._conv(ll[i], self.nFeat, 1, 1, 'VALID', 'll')
 							if self.modif:
 								out[i] = self._conv_bn_relu(ll[i], self.outDim, 1, 1, 'VALID', 'out')
-								domain[i] = self._conv_bn_relu(flip_gradient(ll[i]), 1, tf.shape(ll[i])[1], 1, 'VALID', 'out')
+								#domain[i] = self._conv_bn_relu(flip_gradient(ll[i]), 1, tf.shape(ll[i])[1], 1, 'VALID', 'out')
 							else:
 								out[i] = self._conv(ll[i], self.outDim, 1, 1, 'VALID', 'out')
-								domain[i] = self._conv(flip_gradient(ll[i]), 1, tf.shape(ll[0])[i], 1, 'VALID', 'out')
+								#domain[i] = self._conv(flip_gradient(ll[i]), 1, tf.shape(ll[0])[i], 1, 'VALID', 'out')
 							out_[i] = self._conv(out[i], self.nFeat, 1, 1, 'VALID', 'out_')
 							sum_[i] = tf.add_n([out_[i], sum_[i-1], ll_[0]], name= 'merge')
 					with tf.name_scope('stage_' + str(self.nStack -1)):
@@ -487,14 +487,20 @@ class HourglassModel():
 						ll[self.nStack - 1] = self._conv_bn_relu(drop[self.nStack-1], self.nFeat, 1, 1, 'VALID', 'conv')
 						if self.modif:
 							out[self.nStack - 1] = self._conv_bn_relu(ll[self.nStack - 1], self.outDim, 1,1, 'VALID', 'out')
-							domain[self.nStack - 1] = self._conv_bn_relu(flip_gradient(ll[self.nStack - 1]), 1, tf.shape(ll[i])[1],1, 'VALID', 'out')
+							#domain[self.nStack - 1] = self._conv_bn_relu(flip_gradient(ll[self.nStack - 1]), 1, tf.shape(ll[i])[1],1, 'VALID', 'out')
 						else:
 							out[self.nStack - 1] = self._conv(ll[self.nStack - 1], self.outDim, 1,1, 'VALID', 'out')
-							domain[self.nStack - 1] = self._conv(flip_gradient(ll[self.nStack - 1]), 1, tf.shape(ll[i])[1],1, 'VALID', 'out')
+							#domain[self.nStack - 1] = self._conv(flip_gradient(ll[self.nStack - 1]), 1, tf.shape(ll[i])[1],1, 'VALID', 'out')
+
+				domain[0] = tf.layers.dense(
+                    inputs=flip_gradient(ll[self.nStack - 1]),
+                    units=1
+                )
+
 				if self.modif:
 					return tf.nn.sigmoid(tf.stack(out, axis= 1 , name= 'stack_output'),name = 'final_output'), tf.nn.sigmoid(tf.contrib.layers.register_fully_connected(tf.layers.flatten(tf.stack(domain, axis= 1 , name= 'stack_domain')),1),name = 'final_domain')
 				else:
-					return tf.stack(out, axis= 1 , name = 'final_output'), tf.contrib.layers.register_fully_connected(tf.layers.flatten(tf.stack(out, axis= 1 )),1, name = 'final_domain')
+					return tf.stack(out, axis= 1 , name = 'final_output'), tf.contrib.layers.fully_connected(tf.layers.flatten(tf.stack(out, axis= 1 )),1, scope = 'final_domain')
 						
 				
 	def _conv(self, inputs, filters, kernel_size = 1, strides = 1, pad = 'VALID', name = 'conv'):
