@@ -4,7 +4,7 @@ TRAIN LAUNCHER
 """
 
 import configparser
-from hourglass_tiny_dann import HourglassModel
+from hourglass_tiny_vic import HourglassModel
 from datagen import DataGenerator
 
 def process_config(conf_file):
