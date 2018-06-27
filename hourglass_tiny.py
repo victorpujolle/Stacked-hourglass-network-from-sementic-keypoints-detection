@@ -513,7 +513,7 @@ class HourglassModel():
         """
         with tf.name_scope(name):
             # Kernel for convolution, Xavier Initialisation
-            kernel = tf.Variable(tf.contrib.layers.xavier_initializer(uniform=False)([kernel_size,kernel_size, inputs.get_shape().as_list()[3], filters]), name= 'weights')
+            kernel = tf.Variable(tf.contrib.layers.xavier_initializer(uniform=False)([kernel_size, kernel_size, inputs.get_shape().as_list()[3], filters]), name= 'weights')
             conv = tf.nn.conv2d(inputs, kernel, [1,strides,strides,1], padding=pad, data_format='NHWC')
             if self.w_summary:
                 with tf.device('/cpu:0'):
