@@ -171,13 +171,10 @@ class HourglassModel():
                 else:
                     gamma = 0.1135
                     hm_loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=self.output, labels=self.gtMaps)
-                    hm_loss = (hm_loss - (1 - gamma) * (1 - tf.reshape(self.gtDomain, [4, 1, 1, 1, 1])) * hm_loss) * (
-                                1 + gamma) / (2 * gamma)
+                    #hm_loss = (hm_loss - (1 - gamma) * (1 - tf.reshape(self.gtDomain, [4, 1, 1, 1, 1])) * hm_loss) * (1 + gamma) / (2 * gamma)
                     domain_loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=self.domain, labels=self.gtDomain)
-                    domain_loss = (domain_loss - (1 - gamma) * (1 - self.gtDomain) * domain_loss) * (1 + gamma) / (
-                                2 * gamma)
-                    self.loss = tf.reduce_mean(hm_loss, name='cross_entropy_loss') \
-                                + tf.reduce_mean(domain_loss, name='cross_entropy_domain_loss')
+                    #domain_loss = (domain_loss - (1 - gamma) * (1 - self.gtDomain) * domain_loss) * (1 + gamma) / (2 * gamma)
+                    self.loss = tf.reduce_mean(hm_loss, name='cross_entropy_loss') + tf.reduce_mean(domain_loss, name='cross_entropy_domain_loss')
             lossTime = time.time()
             print('---Loss : Done (' + str(int(abs(graphTime - lossTime))) + ' sec.)')
         with tf.device(self.cpu):
@@ -263,8 +260,8 @@ class HourglassModel():
                     num = np.int(20 * percent / 100)
                     tToEpoch = int((time.time() - epochstartTime) * (100 - percent) / (percent))
                     sys.stdout.write(
-                        '\r Train: {0}>'.format("=" * num) + "{0}>".format(" " * (20 - num)) + ' || ' + str(epoch) + '/' + str(nEpochs) +  ' Epochs || ' + str(percent)[
-                                                                                                      :4] + '%' + ' -cost: ' + str(
+                        '\r Train: {0}>'.format("=" * num) + "{0}>".format(" " * (20 - num)) + ' || ' + str(
+                            epoch) + '/' + str(nEpochs) + ' Epochs || ' + str(percent)[:4] + '%' + ' -cost: ' + str(
                             cost)[:6] + ' -avg_loss: ' + str(avg_cost)[:5] + ' -timeToEnd: ' + str(tToEpoch) + ' sec.')
                     sys.stdout.flush()
                     img_train, gt_train, weight_train, gt_domain = next(self.generator)
@@ -446,15 +443,17 @@ class HourglassModel():
                 else:
                     r2 = self._residual(pool1, numOut=int(self.nFeat / 2), name='r2')
                     r3 = self._residual(r2, numOut=self.nFeat, name='r3')
+
             # Storage Table
-            hg = [None] * self.nStack
-            ll = [None] * self.nStack
-            ll_ = [None] * self.nStack
-            drop = [None] * self.nStack
-            out = [None] * self.nStack
-            out_ = [None] * self.nStack
-            sum_ = [None] * self.nStack
-            domain = [None] * self.nStack
+            hg = [None] * self.nStack     # hourglass net
+            ll = [None] * self.nStack     # convolutional net
+            ll_ = [None] * self.nStack    # convolutional net
+            drop = [None] * self.nStack   # dropout layer
+            out = [None] * self.nStack    # output layer
+            out_ = [None] * self.nStack   # output layer
+            sum_ = [None] * self.nStack   # summation of out_, ll and sum[i-1]
+            domain = [None] * self.nStack # domain adversarial net but everywhere
+
             if self.tiny:
                 with tf.name_scope('stacks'):
                     with tf.name_scope('stage_0'):
@@ -550,13 +549,14 @@ class HourglassModel():
                             domain[self.nStack - 1] = self._conv(flip_gradient(ll[self.nStack - 1]), 1,
                                                                  ll[self.nStack - 1].get_shape().as_list()[1], 1,
                                                                  'VALID', 'out')
+
                 if self.modif:
                     return tf.nn.sigmoid(tf.stack(out, axis=1, name='stack_output'),
                                          name='final_output'), tf.nn.sigmoid(tf.contrib.layers.register_fully_connected(
                         tf.layers.flatten(tf.stack(domain, axis=1, name='stack_domain')), 1), name='final_domain')
                 else:
-                    return tf.stack(out, axis=1, name='final_output'), tf.contrib.layers.fully_connected(
-                        tf.layers.flatten(tf.stack(domain, axis=1)), 1, scope='final_domain')
+                    #print('shape : ', tf.contrib.layers.fully_connected(tf.layers.flatten(tf.stack(domain, axis=1)), 1, scope='final_domain354').shape)
+                    return tf.stack(out, axis=1, name='final_output'), tf.contrib.layers.fully_connected(tf.layers.flatten(flip_gradient(ll[self.nStack - 1])), 1, scope='final_domain')
 
     def _conv(self, inputs, filters, kernel_size=1, strides=1, pad='VALID', name='conv'):
         """ Spatial Convolution (CONV2D)
@@ -703,7 +703,7 @@ class HourglassModel():
             arg        : Tuple of max position
         """
         resh = tf.reshape(tensor, [-1])
-        argmax = tf.arg_max(resh, 0)
+        argmax = tf.argmax(resh, 0)
         return (argmax // tensor.get_shape().as_list()[0], argmax % tensor.get_shape().as_list()[0])
 
     def _compute_err(self, u, v):
@@ -898,13 +898,3 @@ class HourglassModel():
                     tmointer = tf.add_n([inter[i], outmap, ll3])
                     inter.append(tmointer)
         return tf.stack(out, axis=1, name='final_output')
-
-
-
-
-
-
-
-
-
-
