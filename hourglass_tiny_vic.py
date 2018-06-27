@@ -263,7 +263,7 @@ class HourglassModel():
                     num = np.int(20 * percent / 100)
                     tToEpoch = int((time.time() - epochstartTime) * (100 - percent) / (percent))
                     sys.stdout.write(
-                        '\r Train: {0}>'.format("=" * num) + "{0}>".format(" " * (20 - num)) + '||' + str(percent)[
+                        '\r Train: {0}>'.format("=" * num) + "{0}>".format(" " * (20 - num)) + ' || ' + str(epoch) + '/' + str(nEpochs) +  ' Epochs || ' + str(percent)[
                                                                                                       :4] + '%' + ' -cost: ' + str(
                             cost)[:6] + ' -avg_loss: ' + str(avg_cost)[:5] + ' -timeToEnd: ' + str(tToEpoch) + ' sec.')
                     sys.stdout.flush()
