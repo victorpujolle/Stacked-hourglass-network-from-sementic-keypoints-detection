@@ -152,7 +152,7 @@ class Inference():
 				
 
 if __name__ == '__main__':
-	infer=Inference(config_file = 'config.cfg', model = '../trained_networks/hg_test_7_98', yoloModel = 'YOLO_small.ckpt')
+	infer=Inference(config_file = 'config.cfg', model = '../trained_networks/hg_test_9_44', yoloModel = 'YOLO_small.ckpt')
 	val_path='../datasets/val_real'
 	result_path='../datasets/val_real_result'
 # 	val_path='datasets/val'
