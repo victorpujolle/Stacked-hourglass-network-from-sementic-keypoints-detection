@@ -195,7 +195,7 @@ class PredictProcessor():
 					resh = tf.reshape(tensor[:,:,i], [-1])
 				elif len(shape) == 4:
 					resh = tf.reshape(tensor[-1,:,:,i], [-1])
-				arg = tf.arg_max(resh,0)
+				arg = tf.argmax(resh,0)
 				j = tf.expand_dims(tf.stack([arg // tf.to_int64(shape[1]), arg % tf.to_int64(shape[1])], axis = -1), axis = 0)
 				joints = tf.concat([joints, j], axis = 0)
 			return tf.identity(joints, name = 'joints')
