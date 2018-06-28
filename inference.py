@@ -30,14 +30,14 @@ Abstract:
 import sys
 sys.path.append('./')
 
-from hourglass_tiny_vic import HourglassModel
+from hourglass_dann_v10 import HourglassModel
 from time import time, clock
 import numpy as np
 import tensorflow as tf
 import scipy.io
 from train_launcher import process_config
 import cv2
-from predictClass import PredictProcessor
+from predictclass2 import PredictProcessor
 from yolo_net import YOLONet
 from datagen import DataGenerator
 import config as cfg
@@ -152,9 +152,9 @@ class Inference():
 				
 
 if __name__ == '__main__':
-	infer=Inference(config_file = 'config.cfg', model = '../trained_networks/hg_test_10_68', yoloModel = 'YOLO_small.ckpt')
-	val_path='../datasets/val_real'
-	result_path='../datasets/val_real_result'
+	infer=Inference(config_file = 'config.cfg', model = '../trained_networks/hourglass_82', yoloModel = 'YOLO_small.ckpt')
+	val_path='../datasets/val_blender'
+	result_path='../datasets/val_blender_result'
 # 	val_path='datasets/val'
 # 	result_path='datasets/val_result'
 	val_list=os.listdir(val_path)
