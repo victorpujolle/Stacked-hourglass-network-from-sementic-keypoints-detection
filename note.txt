@@ -1,3 +1,14 @@
 The shape of the domain layer (domain[self.nStack].shape) == (?,1,1,1)
 
-I change modif=False to modif=True in the parameters because the documentation tell us not to use modif
+
+
+new hourglass todo :
+    _graph_hourglass : ok
+        _hourglass : ok
+        _conv_bn_relu : ok
+        _residual : ok
+            _conv_block : ok
+            _skip_layer : ok
+                _conv : ok
+    _accuracy_computation : ok
+    _aux_generator :
