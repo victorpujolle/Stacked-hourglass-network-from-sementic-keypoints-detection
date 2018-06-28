@@ -60,8 +60,8 @@ class PredictProcessor():
 			config_dict	: config_dict
 		"""
 		self.params = config_dict
-		self.HG = HourglassModel(nFeat= self.params['nfeats'], nStack = self.params['nstacks'], 
-						nModules = self.params['nmodules'], nLow = self.params['nlow'], outputDim = self.params['num_joints'], 
+		self.HG = HourglassModel(nFeat= self.params['nfeats'], nStack = self.params['nstacks'],
+						nModules = self.params['nmodules'], nLow = self.params['nlow'], outputDim = self.params['num_joints'],
 						batch_size = self.params['batch_size'], drop_rate = self.params['dropout_rate'], lear_rate = self.params['learning_rate'],
 						decay = self.params['learning_rate_decay'], decay_step = self.params['decay_step'], dataset = None, training = False,
 						w_summary = True, logdir_test = self.params['log_dir_test'],
