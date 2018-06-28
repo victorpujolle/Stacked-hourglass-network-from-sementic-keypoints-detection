@@ -128,8 +128,7 @@ class HourglassModel():
 			Be sure to build the model first
 		"""
 		return self.saver
-	
-	
+
 	def generate_model(self):
 		""" Create the complete graph
 		"""

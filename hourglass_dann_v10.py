@@ -445,9 +445,22 @@ class HourglassModel:
                     out[self.nStack - 1] = self._conv(ll[self.nStack - 1], self.outDim, 1, 1, 'VALID', 'out')
                     domain[self.nStack - 1] = self._conv(ll[self.nStack - 1], 1, ll[self.nStack - 1].get_shape().as_list()[1], 1, 'VALID', 'out')
 
+            with tf.name_scope('domain_classifier'):
+            # domain classifier
+                stack_out = tf.stack(out)
+                flipped = flip_gradient(stack_out)
+                dense = tf.layers.dense(
+                    inputs=flipped,
+                    units=1024
+                )
+                domain_logits= tf.contrib.layers.fully_connected(
+                    inputs=dense,
+                    num_outputs=1
+                )
 
             # return of the heatmap and the domain
-            return tf.stack(out, axis=1, name='final_output'), tf.contrib.layers.fully_connected(flip_gradient(tf.stack(domain)), num_outputs=1)
+            #return tf.stack(out, axis=1, name='final_output'), tf.contrib.layers.fully_connected(flip_gradient(tf.stack(domain)), num_outputs=1)
+            return tf.stack(out, axis=1, name='final_output'), domain_logits
 
 
     def record_training(self, record):
