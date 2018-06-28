@@ -169,7 +169,7 @@ class HourglassModel():
                 if self.w_loss:
                     self.loss = tf.reduce_mean(self.weighted_bce_loss(), name='reduced_loss')
                 else:
-                    gamma = 0.1135
+                    #gamma = 0.1135
                     hm_loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=self.output, labels=self.gtMaps)
                     #hm_loss = (hm_loss - (1 - gamma) * (1 - tf.reshape(self.gtDomain, [4, 1, 1, 1, 1])) * hm_loss) * (1 + gamma) / (2 * gamma)
                     domain_loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=self.domain, labels=self.gtDomain)
@@ -555,8 +555,7 @@ class HourglassModel():
                                          name='final_output'), tf.nn.sigmoid(tf.contrib.layers.register_fully_connected(
                         tf.layers.flatten(tf.stack(domain, axis=1, name='stack_domain')), 1), name='final_domain')
                 else:
-                    #print('shape : ', tf.contrib.layers.fully_connected(tf.layers.flatten(tf.stack(domain, axis=1)), 1, scope='final_domain354').shape)
-                    return tf.stack(out, axis=1, name='final_output'), tf.contrib.layers.fully_connected(tf.layers.flatten(flip_gradient(ll[self.nStack - 1])), 1, scope='final_domain')
+                    return tf.stack(out, axis=1, name='final_output'),  tf.contrib.layers.fully_connected(tf.layers.dense(tf.layers.flatten(tf.stack(domain, axis=1)),units=1024),1)
 
     def _conv(self, inputs, filters, kernel_size=1, strides=1, pad='VALID', name='conv'):
         """ Spatial Convolution (CONV2D)
