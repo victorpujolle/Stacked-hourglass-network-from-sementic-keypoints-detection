@@ -43,7 +43,7 @@ class HourglassModel():
 
     def __init__(self, nFeat=512, nStack=4, nModules=1, nLow=4, outputDim=16, batch_size=16, drop_rate=0.2,
                  lear_rate=2.5e-4, decay=0.96, decay_step=2000, dataset=None, training=True, w_summary=True,
-                 logdir_train=None, logdir_test=None, tiny=True, attention=False, modif=True, w_loss=False,
+                 logdir_train=None, logdir_test=None, tiny=True, attention=False, modif=False, w_loss=False,
                  name='tiny_hourglass',
                  joints=['r_anckle', 'r_knee', 'r_hip', 'l_hip', 'l_knee', 'l_anckle', 'pelvis', 'thorax', 'neck',
                          'head', 'r_wrist', 'r_elbow', 'r_shoulder', 'l_shoulder', 'l_elbow', 'l_wrist']):
@@ -555,7 +555,7 @@ class HourglassModel():
                                          name='final_output'), tf.nn.sigmoid(tf.contrib.layers.register_fully_connected(
                         tf.layers.flatten(tf.stack(domain, axis=1, name='stack_domain')), 1), name='final_domain')
                 else:
-                    return tf.stack(out, axis=1, name='final_output'),  tf.contrib.layers.fully_connected(tf.layers.dense(tf.layers.flatten(tf.stack(domain, axis=1)),units=1024),1)
+                    return tf.stack(out, axis=1, name='final_output'), tf.contrib.layers.fully_connected(tf.layers.flatten(tf.stack(out, axis= 1 )),1, scope = 'final_domain')
 
     def _conv(self, inputs, filters, kernel_size=1, strides=1, pad='VALID', name='conv'):
         """ Spatial Convolution (CONV2D)
