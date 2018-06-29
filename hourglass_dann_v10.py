@@ -450,13 +450,8 @@ class HourglassModel:
             # domain classifier
                 stack_out = tf.layers.flatten(out[self.nStack - 1])
                 flipped = flip_gradient(stack_out)
-                dense = tf.layers.dense(
-                    inputs=flipped,
-                    units=512
-                )
-
                 domain_logits= tf.contrib.layers.fully_connected(
-                    inputs=dense,
+                    inputs=flipped,
                     num_outputs=1
                 )
 
