@@ -85,6 +85,8 @@ class HourglassModel:
 
         with tf.name_scope('loss'):
 
+            gamma = 0.1
+
             hm_loss = tf.nn.sigmoid_cross_entropy_with_logits(
                 logits=self.output,
                 labels=self.gtMaps
@@ -93,6 +95,23 @@ class HourglassModel:
                 logits=self.domain,
                 labels=self.gtDomain
             )
+
+            domain_loss = domain_loss - (1 - gamma) * (1 - self.gtMaps) * domain_loss
+
+            gamma = 0.1135
+            hm_loss = tf.nn.sigmoid_cross_entropy_with_logits(
+                logits=self.output,
+                labels=self.gtMaps
+            )
+
+            hm_loss = (hm_loss - (1 - gamma) * (1 - tf.reshape(self.gtDomain, [4, 1, 1, 1, 1])) * hm_loss) * (1 + gamma) / (2 * gamma)
+
+            domain_loss = tf.nn.sigmoid_cross_entropy_with_logits(
+                logits=self.domain,
+                labels=self.gtDomain
+            )
+
+            domain_loss = (domain_loss - (1 - gamma) * (1 - self.gtDomain) * domain_loss) * (1 + gamma) / (2 * gamma)
 
             self.loss = tf.reduce_mean(hm_loss, name='cross_entropy_heatmap_loss') + tf.reduce_mean(domain_loss, name='cross_entropy_domain_loss')
 
@@ -118,8 +137,8 @@ class HourglassModel:
 
         with tf.name_scope('rmsprop'):
         # the choice of the optimizer
-            #self.rmsprop = tf.train.RMSPropOptimizer(learning_rate=self.lr)
-            self.rmsprop = tf.train.GradientDescentOptimizer(learning_rate=self.lr)
+            self.rmsprop = tf.train.RMSPropOptimizer(learning_rate=self.lr)
+
 
         optimTime =time.time()
         print('---Optim : Done (' + str(int(abs(optimTime - lrTime))) + ' sec.)')
@@ -450,10 +469,14 @@ class HourglassModel:
             # domain classifier
                 stack_out = tf.layers.flatten(out[self.nStack - 1])
                 flipped = flip_gradient(stack_out)
-                domain_logits= tf.contrib.layers.fully_connected(
+                dense = tf.layers.dense(
                     inputs=flipped,
-                    num_outputs=1
+                    units=1024
                 )
+                domain_logits= tf.nn.sigmoid(tf.contrib.layers.fully_connected(
+                    inputs=dense,
+                    num_outputs=1
+                ))
 
             # return of the heatmap and the domain
             #return tf.stack(out, axis=1, name='final_output'), tf.contrib.layers.fully_connected(flip_gradient(tf.stack(domain)), num_outputs=1)
