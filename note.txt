@@ -2,13 +2,6 @@ The shape of the domain layer (domain[self.nStack].shape) == (?,1,1,1)
 
 
 
-new hourglass todo :
-    _graph_hourglass : ok
-        _hourglass : ok
-        _conv_bn_relu : ok
-        _residual : ok
-            _conv_block : ok
-            _skip_layer : ok
-                _conv : ok
-    _accuracy_computation : ok
-    _aux_generator :
+hg_test_13 : result are slightly better with the domain layer only on out[nStack - 1] than on tf.stack(out)
+hg_test_14 :
+hg_test_15 : rms optimizer -> gradient descent optimizer
