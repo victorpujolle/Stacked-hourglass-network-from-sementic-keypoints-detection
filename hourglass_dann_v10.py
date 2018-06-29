@@ -117,7 +117,9 @@ class HourglassModel:
 
 
         with tf.name_scope('rmsprop'):
-            self.rmsprop = tf.train.RMSPropOptimizer(learning_rate=self.lr)
+        # the choice of the optimizer
+            #self.rmsprop = tf.train.RMSPropOptimizer(learning_rate=self.lr)
+            self.rmsprop = tf.train.GradientDescentOptimizer(learning_rate=self.lr)
 
         optimTime =time.time()
         print('---Optim : Done (' + str(int(abs(optimTime - lrTime))) + ' sec.)')
@@ -446,17 +448,17 @@ class HourglassModel:
 
             with tf.name_scope('domain_classifier'):
             # domain classifier
-                stack_out = tf.layers.flatten(tf.stack(out, axis=1))
+                stack_out = tf.layers.flatten(out[self.nStack - 1])
                 flipped = flip_gradient(stack_out)
                 dense = tf.layers.dense(
                     inputs=flipped,
-                    units=1024
+                    units=512
                 )
+
                 domain_logits= tf.contrib.layers.fully_connected(
                     inputs=dense,
                     num_outputs=1
                 )
-                print('domainlogit shape', domain_logits.shape)
 
             # return of the heatmap and the domain
             #return tf.stack(out, axis=1, name='final_output'), tf.contrib.layers.fully_connected(flip_gradient(tf.stack(domain)), num_outputs=1)
