@@ -89,7 +89,6 @@ class HourglassModel:
                 logits=self.output,
                 labels=self.gtMaps
             )
-
             domain_loss = tf.nn.sigmoid_cross_entropy_with_logits(
                 logits=self.domain,
                 labels=self.gtDomain
@@ -447,7 +446,7 @@ class HourglassModel:
 
             with tf.name_scope('domain_classifier'):
             # domain classifier
-                stack_out = tf.stack(out)
+                stack_out = tf.layers.flatten(tf.stack(out, axis=1))
                 flipped = flip_gradient(stack_out)
                 dense = tf.layers.dense(
                     inputs=flipped,
@@ -457,6 +456,7 @@ class HourglassModel:
                     inputs=dense,
                     num_outputs=1
                 )
+                print('domainlogit shape', domain_logits.shape)
 
             # return of the heatmap and the domain
             #return tf.stack(out, axis=1, name='final_output'), tf.contrib.layers.fully_connected(flip_gradient(tf.stack(domain)), num_outputs=1)
