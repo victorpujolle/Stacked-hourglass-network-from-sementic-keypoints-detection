@@ -1,3 +1,7 @@
 hg_test_13_43 : result are slightly better with the domain layer only on out[nStack - 1] than on tf.stack(out)
 hg_test_14 : addition of a dense layer of 512 neurones in the gradient classifier : does not work even on the blender data
-hg_test_15 : rms optimizer -> gradient descent optimizer
+hg_test_15 : rms optimizer -> gradient descent optimizer : not working att all
+hg_test_16_41 : rms optimizer : perform well on blender, not at all on real data
+hg_test_17_40 : add a sigmoid function at the end of the domain classifier : perform well on blender, not at all on real data
+hg_test_18_40 : add a dense layer but keeping the sigmoid : perform well on blender, not at all on real data
+hg_test_19_200 : re implementing the gamma
