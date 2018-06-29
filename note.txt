@@ -1,7 +1,3 @@
-The shape of the domain layer (domain[self.nStack].shape) == (?,1,1,1)
-
-
-
-hg_test_13 : result are slightly better with the domain layer only on out[nStack - 1] than on tf.stack(out)
-hg_test_14 :
+hg_test_13_43 : result are slightly better with the domain layer only on out[nStack - 1] than on tf.stack(out)
+hg_test_14 : addition of a dense layer of 512 neurones in the gradient classifier : does not work even on the blender data
 hg_test_15 : rms optimizer -> gradient descent optimizer
