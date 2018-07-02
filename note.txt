@@ -4,4 +4,4 @@ hg_test_15 : rms optimizer -> gradient descent optimizer : not working att all
 hg_test_16_41 : rms optimizer : perform well on blender, not at all on real data
 hg_test_17_40 : add a sigmoid function at the end of the domain classifier : perform well on blender, not at all on real data
 hg_test_18_40 : add a dense layer but keeping the sigmoid : perform well on blender, not at all on real data
-hg_test_19_200 : re implementing the gamma
+hg_test_19_200 : re implementing the gamma : this is not better
