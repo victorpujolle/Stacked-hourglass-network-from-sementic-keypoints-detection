@@ -152,15 +152,15 @@ class Inference():
 				
 
 if __name__ == '__main__':
-	infer=Inference(config_file = 'config.cfg', model = '../trained_networks/hg_test_20_40', yoloModel = 'YOLO_small.ckpt')
-	val_path='../datasets/val_real'
-	result_path='../datasets/val_real_result'
+	infer=Inference(config_file = 'config.cfg', model = '../trained_networks/hg_test_22_89', yoloModel = 'YOLO_small.ckpt')
+	val_path='../datasets/val_book_masked'
+	result_path='../datasets/val_book_masked_result'
 # 	val_path='datasets/val'
 # 	result_path='datasets/val_result'
 	val_list=os.listdir(val_path)
 	for file in val_list:
 		if ('.png' in file or '.jpg' in file or '.bmp' in file):
-			file_path = val_path+'/'+file
+			file_path = val_path+'/'+ file
 			img = cv2.resize(cv2.copyMakeBorder(cv2.imread(file_path),80,80,0,0,cv2.BORDER_REPLICATE),(256,256))
 			img = img[:,:,[2,1,0]]
 			out=np.squeeze(infer.predictHM(img))
