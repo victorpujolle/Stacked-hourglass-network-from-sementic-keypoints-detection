@@ -13,4 +13,5 @@ There is a high angular error with the evaluation due probably to the fact that 
 hg_test_23_59 : error during the training, stopped at 59 epochs. The network performs well. This network use the gamma to modify the loss function. This does not seems to show any improvement.
 hg_test_24_41 : suppression of the domain loss to evaluate the impact of the domain adaptation on the result, the impact is not observable
 hg_test_25 : modification of the domain classifier => this is not a significant improvement
-hg_test_26 : domain classifier : add a dense layer
+hg_test_26 : domain classifier : add a dense layer -> the network does not perform good
+hg_test_27 : suppression of the gamma, addition of a dropout layer in the domain classifier to reduce the over fitting
