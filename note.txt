@@ -7,7 +7,7 @@ hg_test_18_40 : add a dense layer but keeping the sigmoid : perform well on blen
 hg_test_19_200 : re implementing the gamma : this is not better
 
 Now the evaluation will be one images where the book is masked
-There is a high angular error with the evauation due prebably to the fact that 00_1_4_7 and 01_1_4_7 present the same box but with a rotation a 180 degrees
+There is a high angular error with the evaluation due probably to the fact that 00_1_4_7 and 01_1_4_7 present the same box but with a rotation a 180 degrees
 
 
-hg_test_23_59 : error during the training, stoped at 59 epochs. The network performs well
+hg_test_23_59 : error during the training, stopped at 59 epochs. The network performs well. This network use the gamma to modify the loss function. This does not seems to show any improvement.
