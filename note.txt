@@ -5,3 +5,9 @@ hg_test_16_41 : rms optimizer : perform well on blender, not at all on real data
 hg_test_17_40 : add a sigmoid function at the end of the domain classifier : perform well on blender, not at all on real data
 hg_test_18_40 : add a dense layer but keeping the sigmoid : perform well on blender, not at all on real data
 hg_test_19_200 : re implementing the gamma : this is not better
+
+Now the evaluation will be one images where the book is masked
+There is a high angular error with the evauation due prebably to the fact that 00_1_4_7 and 01_1_4_7 present the same box but with a rotation a 180 degrees
+
+
+hg_test_23_59 : error during the training, stoped at 59 epochs. The network performs well
