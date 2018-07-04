@@ -11,3 +11,4 @@ There is a high angular error with the evaluation due probably to the fact that 
 
 
 hg_test_23_59 : error during the training, stopped at 59 epochs. The network performs well. This network use the gamma to modify the loss function. This does not seems to show any improvement.
+hg_test_24 : suppression of the domain loss to evaluate the impact of the domain adaptation on the result
