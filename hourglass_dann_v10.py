@@ -95,9 +95,9 @@ class HourglassModel:
             )
 
             # gamma implemantation
-            #gamma = 0.1
-            #hm_loss = (hm_loss - (1 - gamma) * (1 - tf.reshape(self.gtDomain, [4, 1, 1, 1, 1])) * hm_loss) * (1 + gamma) / (2 * gamma)
-            #domain_loss = (domain_loss - (1 - gamma) * (1 - self.gtDomain) * domain_loss) * (1 + gamma) / (2 * gamma)
+            gamma = 0.1
+            hm_loss = (hm_loss - (1 - gamma) * (1 - tf.reshape(self.gtDomain, [4, 1, 1, 1, 1])) * hm_loss) * (1 + gamma) / (2 * gamma)
+            domain_loss = (domain_loss - (1 - gamma) * (1 - self.gtDomain) * domain_loss) * (1 + gamma) / (2 * gamma)
 
             self.loss = tf.reduce_mean(hm_loss, name='cross_entropy_heatmap_loss') + tf.reduce_mean(domain_loss, name='cross_entropy_domain_loss')
 
@@ -458,16 +458,11 @@ class HourglassModel:
 
                 dense = tf.layers.dense(
                     inputs=flipped,
-                    units=512
-                )
-
-                dropout = tf.layers.dropout(
-                    inputs=dense,
-                    rate=0.4
+                    units=1024
                 )
 
                 domain_logits= tf.nn.sigmoid(tf.contrib.layers.fully_connected(
-                    inputs=dropout,
+                    inputs=dense,
                     num_outputs=1,
                 ))
 

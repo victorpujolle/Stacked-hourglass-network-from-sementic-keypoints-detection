@@ -15,4 +15,6 @@ hg_test_24_41 : suppression of the domain loss to evaluate the impact of the dom
 hg_test_25 : modification of the domain classifier => this is not a significant improvement
 hg_test_26 : domain classifier : add a dense layer -> the network does not perform good
 hg_test_27 : suppression of the gamma, addition of a dropout layer in the domain classifier to reduce the over fitting : not bad
-hg_test_28 : learning rate : 0.001 -> 0.00025 and dropout rate : 0.2 -> 0.4 : I try to see if over fitting is a issue
+hg_test_27 : learning rate : 0.001 -> 0.00025 and dropout rate : 0.2 -> 0.4 : I try to see if over fitting is a issue -> the net does not performs as well as before, one can conclude that overfitting is not an issue know
+hg_test_28 : suppression of the dropout layer in the domain classifier : the net has good results but could be improve
+hg_test_29 : augmentation of the domain classifier capacity and reduction of the dropout rate to see if underfitting is an issue
