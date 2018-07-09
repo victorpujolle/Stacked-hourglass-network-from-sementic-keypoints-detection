@@ -99,6 +99,9 @@ class HourglassModel:
             #hm_loss = (hm_loss - (1 - gamma) * (1 - tf.reshape(self.gtDomain, [4, 1, 1, 1, 1])) * hm_loss) * (1 + gamma) / (2 * gamma)
             #domain_loss = (domain_loss - (1 - gamma) * (1 - self.gtDomain) * domain_loss) * (1 + gamma) / (2 * gamma)
 
+            self.hm_loss = hm_loss
+            self.domain_loss = domain_loss
+
             self.loss = tf.reduce_mean(hm_loss, name='cross_entropy_heatmap_loss') + tf.reduce_mean(domain_loss, name='cross_entropy_domain_loss')
 
         lossTime = time.time()
@@ -226,6 +229,9 @@ class HourglassModel:
 
                     img_train, gt_train, weight_train, gt_domain = next(self.generator)
 
+                    print('hm_loos : ', hm_loss)
+                    print('domain_loss : ', domain_loss)
+
                     if i % saveStep == 0:
                         _, c, summary = self.Session.run(
                             [self.train_rmsprop, self.loss, self.train_op],
@@ -293,6 +299,7 @@ class HourglassModel:
             print('  Relative Improvement: ' + str((self.resume['err'][-1] - self.resume['err'][0]) * 100) + '%')
             print('  Training Time: ' + str(datetime.timedelta(seconds=time.time() - startTime)))
 
+        self.Session.close()
 
     def _accuracy_computation(self):
         """Compute the accuracy tensor
@@ -450,6 +457,7 @@ class HourglassModel:
 
                     out[self.nStack - 1] = self._conv(ll[self.nStack - 1], self.outDim, 1, 1, 'VALID', 'out')
                     domain[self.nStack - 1] = self._conv(ll[self.nStack - 1], 1, ll[self.nStack - 1].get_shape().as_list()[1], 1, 'VALID', 'out')
+
 
             with tf.name_scope('domain_classifier'):
             # domain classifier

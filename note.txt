@@ -18,4 +18,6 @@ hg_test_27 : suppression of the gamma, addition of a dropout layer in the domain
 hg_test_27 : learning rate : 0.001 -> 0.00025 and dropout rate : 0.2 -> 0.4 : I try to see if over fitting is a issue -> the net does not performs as well as before, one can conclude that overfitting is not an issue know
 hg_test_28 : suppression of the dropout layer in the domain classifier : the net has good results but could be improve
 hg_test_29 : augmentation of the domain classifier capacity and reduction of the dropout rate to see if under-fitting is an issue : improvement
-hg_test_30 : is the gamma useful ? -> the suppression of gamma lead to a small improvement
+hg_test_30 : is the gamma useful ? -> the suppression of gamma lead to a small improvement -> gamma is not useful
+hg_test_31 : reduction of the dropout rate 0.2 -> 0.1 : the performance decreased -> optimal dropout rate between 0.3 and 0.1
+hg_test_32 : test for all the dropout rate between 0.1 and 0.3

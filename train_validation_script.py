@@ -159,49 +159,38 @@ class Inference():
                          thickness=5)
 
 
+
+
 if __name__ == '__main__':
+    for dr in np.linspace(0.1,0.3,20):
 
-    net_name = '../trained_networks/hourglass_test_22'
-    result_path = '../datasets/val_real_result'
+        network_name = '../trained_networks/hg_test_32_dr_' + str(round(dr,2))
+
+        try :
+            print('--Parsing Config File')
+            params = process_config('config.cfg')
+
+            print('--Creating Dataset')
+            dataset = DataGenerator(params['joint_list'], params['img_directory'], params['training_txt_file'],
+                                    remove_joints=params['remove_joints'])
+            dataset._create_train_table()
+            dataset._randomize()
+            dataset._create_sets()
+            # model = HourglassModel(nFeat=params['nfeats'], nStack=params['nstacks'], nModules=params['nmodules'], nLow=params['nlow'], outputDim=params['num_joints'], batch_size=params['batch_size'], attention = params['mcam'], training=True, drop_rate= params['dropout_rate'], lear_rate=params['learning_rate'], decay=params['learning_rate_decay'], decay_step=params['decay_step'], dataset=dataset, name=params['name'], logdir_train=params['log_dir_train'], logdir_test=params['log_dir_test'], tiny= params['tiny'], w_loss=params['weighted_loss'], joints= params['joint_list'], modif=False)
+
+            model = HourglassModel(nFeat=params['nfeats'], nStack=params['nstacks'], nModules=params['nmodules'],
+                                   nLow=params['nlow'], outputDim=params['num_joints'], batch_size=params['batch_size'],
+                                   drop_rate=params['dropout_rate'], lear_rate=round(dr,2),
+                                   decay=params['learning_rate_decay'], decay_step=params['decay_step'], dataset=dataset,
+                                   training=True, logdir_train=params['log_dir_train'], logdir_test=params['log_dir_test'],
+                                   name=network_name, joints=params['joint_list'])
+
+            model.generate_model()
+            model.training_init(nEpochs=50, epochSize=params['epoch_size'], saveStep=params['saver_step'],
+                                dataset=None)
 
 
-    print('--Parsing Config File')
-    params = process_config('config.cfg')
 
-    print('--Creating Dataset')
-    dataset = DataGenerator(params['joint_list'], params['img_directory'], params['training_txt_file'], remove_joints=params['remove_joints'])
-    dataset._create_train_table()
-    dataset._randomize()
-    dataset._create_sets(validation_rate=0.15)
-
-    training_set = np.load('Dataset-Training-Set.npy')
-
-    model = HourglassModel(nFeat=params['nfeats'], nStack=params['nstacks'], nModules=params['nmodules'],
-                           nLow=params['nlow'], outputDim=params['num_joints'], batch_size=params['batch_size'],
-                           drop_rate=params['dropout_rate'], lear_rate=params['learning_rate'],
-                           decay=params['learning_rate_decay'], decay_step=params['decay_step'], dataset=dataset,
-                           training=True, logdir_train=params['log_dir_train'], logdir_test=params['log_dir_test'],
-                           name=net_name, joints=params['joint_list'])
-
-    model.generate_model()
-    model.training_init(nEpochs=params['nepochs'], epochSize=params['epoch_size'], saveStep=params['saver_step'],
-                        dataset=training_set)
-
-
-
-    net_name += '_' + str(params['nepochs'])
-
-    infer = Inference(config_file='config.cfg', model=net_name, yoloModel='YOLO_small.ckpt')
-
-    validation_set = np.load('Dataset-Validation-Set.npy')
-
-    for file in validation_set:
-        file_path = params['img_directory'] + '/' + file[:-1]
-        img = cv2.resize(cv2.copyMakeBorder(cv2.imread(file_path), 80, 80, 0, 0, cv2.BORDER_REPLICATE), (256, 256))
-        img = img[:, :, [2, 1, 0]]
-        out = np.squeeze(infer.predictHM(img))
-        N = out.shape[2]
-        cv2.imwrite(result_path + '/' + file[:-1], img)
-        for i in range(N):
-            cv2.imwrite(result_path + '/' + file[:-5] + '_' + ('%02d' % (i + 1)) + file[-5:-1], (out[:, :, i] * 255).astype('uint8'))
+        except:
+            pass
 
