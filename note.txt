@@ -22,4 +22,5 @@ hg_test_30 : is the gamma useful ? -> the suppression of gamma lead to a small i
 hg_test_31 : reduction of the dropout rate 0.2 -> 0.1 : the performance decreased -> optimal dropout rate between 0.3 and 0.1
 hg_test_32 : test for all the dropout rate between 0.1 and 0.3
 hg_test_34 : it could be interesting to see if the metric of the heatmap loss is good, A L2 mesure could be more effective. Moreover, a hyperparameter to weight the importance of the two losses could be useful.
-hg_test_35_200 : the L2 norm shows good results
+hg_test_35_200 : the L2 norm shows good
+hg_test_36 : DANN is disable to see is there is a difference
