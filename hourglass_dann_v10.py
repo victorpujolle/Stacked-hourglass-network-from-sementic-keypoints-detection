@@ -108,7 +108,7 @@ class HourglassModel:
             self.domain_loss = tf.reduce_mean(domain_loss)
 
 
-            self.loss = tf.reduce_mean(hm_loss2, name='cross_entropy_heatmap_loss') #+ tf.reduce_mean(domain_loss, name='cross_entropy_domain_loss')
+            self.loss = tf.reduce_mean(hm_loss2, name='cross_entropy_heatmap_loss') + tf.reduce_mean(domain_loss, name='cross_entropy_domain_loss')
 
         lossTime = time.time()
         print('---Loss : Done (' + str(int(abs(graphTime - lossTime))) + ' sec.)')
@@ -253,9 +253,9 @@ class HourglassModel:
                             self.gtDomain: gt_domain}
                         )
 
-                        print('hm_loss norm cross entropy : ', hm_loss)
-                        print('hm_loss norm L2            :', hm_loss2)
-                        print('domain loss                : ', domain_loss)
+                        #print('hm_loss norm cross entropy : ', hm_loss)
+                        #print('hm_loss norm L2            :', hm_loss2)
+                        #print('domain loss                : ', domain_loss)
 
                     cost += c
                     avg_cost += c / epochSize
