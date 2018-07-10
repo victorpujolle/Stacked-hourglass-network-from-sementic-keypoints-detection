@@ -24,4 +24,7 @@ hg_test_32 : test for all the dropout rate between 0.1 and 0.3
 hg_test_34 : it could be interesting to see if the metric of the heatmap loss is good, A L2 mesure could be more effective. Moreover, a hyperparameter to weight the importance of the two losses could be useful.
 hg_test_35_200 : the L2 norm shows good
 hg_test_36 : DANN is disable to see is there is a difference
-hg_test_36 : same as the precedent but the DANN is enable to mesure the difference
+hg_test_36 : same as the precedent but the DANN is enable to mesure the difference (2 layers)
+hg_test_37 : try to see what is the best size for the domain classifier : here 1 layer
+hg_test_37 : 3 layers, really small improvement of the results
+hg_test_38 : 3 layers, relu activation function to add some non linearity

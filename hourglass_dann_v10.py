@@ -471,13 +471,20 @@ class HourglassModel:
                 stack_out = tf.layers.flatten(tf.stack(out, axis=1))
                 flipped = flip_gradient(stack_out)
 
-                dense = tf.layers.dense(
+                dense1 = tf.layers.dense(
                     inputs=flipped,
-                    units=1024
+                    units=1024,
+                    activation=tf.nn.relu
+                )
+
+                dense2 = tf.layers.dense(
+                    inputs=dense1,
+                    units=1024,
+                    activation=tf.nn.relu
                 )
 
                 domain_logits= tf.nn.sigmoid(tf.contrib.layers.fully_connected(
-                    inputs=dense,
+                    inputs=dense2,
                     num_outputs=1,
                 ))
 
