@@ -27,4 +27,4 @@ hg_test_36 : DANN is disable to see is there is a difference
 hg_test_36 : same as the precedent but the DANN is enable to mesure the difference (2 layers)
 hg_test_37 : try to see what is the best size for the domain classifier : here 1 layer
 hg_test_37 : 3 layers, really small improvement of the results
-hg_test_38 : 3 layers, relu activation function to add some non linearity
+hg_test_38 : 3 layers, relu activation function to add some non linearity : the net does not perform as well as before

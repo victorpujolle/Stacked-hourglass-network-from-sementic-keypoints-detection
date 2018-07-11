@@ -477,14 +477,8 @@ class HourglassModel:
                     activation=tf.nn.relu
                 )
 
-                dense2 = tf.layers.dense(
-                    inputs=dense1,
-                    units=1024,
-                    activation=tf.nn.relu
-                )
-
                 domain_logits= tf.nn.sigmoid(tf.contrib.layers.fully_connected(
-                    inputs=dense2,
+                    inputs=dense1,
                     num_outputs=1,
                 ))
 
