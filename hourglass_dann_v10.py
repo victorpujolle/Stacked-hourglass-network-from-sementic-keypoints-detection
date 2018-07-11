@@ -477,8 +477,24 @@ class HourglassModel:
                     activation=tf.nn.relu
                 )
 
-                domain_logits= tf.nn.sigmoid(tf.contrib.layers.fully_connected(
+                dropout1 = tf.layers.dropout(
                     inputs=dense1,
+                    rate=self.dropout_rate
+                )
+
+                dense2 = tf.layers.dense(
+                    inputs=dropout1,
+                    units=1024,
+                    activation=tf.nn.relu
+                )
+
+                dropout2 = tf.layers.dropout(
+                    inputs=dense2,
+                    rate=self.dropout_rate
+                )
+
+                domain_logits= tf.nn.sigmoid(tf.contrib.layers.fully_connected(
+                    inputs=dense2,
                     num_outputs=1,
                 ))
 
