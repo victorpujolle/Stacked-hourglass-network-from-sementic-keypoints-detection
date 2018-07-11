@@ -29,4 +29,5 @@ hg_test_37 : try to see what is the best size for the domain classifier : here 1
 hg_test_37 : 3 layers, really small improvement of the results
 hg_test_38 : 3 layers, relu activation function to add some non linearity : the net does not perform as well as before
 hg_test_38 : 2 layers, relu activation : the results are worse than before
-hg_test_39 : 3 layers, relu, dropout
+hg_test_39 : 3 layers, relu, dropout : not so bad but less efficient that the 3 layers without relu
+hg_test_40 : 3 layers, dropout, no activation : the network overcome the others

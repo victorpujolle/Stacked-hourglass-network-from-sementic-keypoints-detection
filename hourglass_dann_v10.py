@@ -474,7 +474,7 @@ class HourglassModel:
                 dense1 = tf.layers.dense(
                     inputs=flipped,
                     units=1024,
-                    activation=tf.nn.relu
+                    activation=None
                 )
 
                 dropout1 = tf.layers.dropout(
@@ -485,7 +485,7 @@ class HourglassModel:
                 dense2 = tf.layers.dense(
                     inputs=dropout1,
                     units=1024,
-                    activation=tf.nn.relu
+                    activation=None
                 )
 
                 dropout2 = tf.layers.dropout(
@@ -494,7 +494,7 @@ class HourglassModel:
                 )
 
                 domain_logits= tf.nn.sigmoid(tf.contrib.layers.fully_connected(
-                    inputs=dense2,
+                    inputs=dropout2,
                     num_outputs=1,
                 ))
 
