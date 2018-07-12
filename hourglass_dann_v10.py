@@ -94,8 +94,9 @@ class HourglassModel:
                 labels=self.gtDomain
             )
 
-            hm_loss2 = 0.5*tf.norm(
-                tensor=self.output-self.gtMaps
+            hm_loss2 = tf.losses.mean_squared_error(
+                labels=self.gtMaps,
+                predictions=self.output
             )
 
             # gamma implemantation
