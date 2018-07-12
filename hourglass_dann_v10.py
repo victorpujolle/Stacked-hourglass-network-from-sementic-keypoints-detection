@@ -479,7 +479,7 @@ class HourglassModel:
 
                 dropout1 = tf.layers.dropout(
                     inputs=dense1,
-                    rate=self.dropout_rate
+                    rate=0.4
                 )
 
                 dense2 = tf.layers.dense(
@@ -490,7 +490,7 @@ class HourglassModel:
 
                 dropout2 = tf.layers.dropout(
                     inputs=dense2,
-                    rate=self.dropout_rate
+                    rate=0.4
                 )
 
                 domain_logits= tf.nn.sigmoid(tf.contrib.layers.fully_connected(
