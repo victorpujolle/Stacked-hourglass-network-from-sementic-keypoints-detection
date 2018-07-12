@@ -85,7 +85,7 @@ class HourglassModel:
 
         with tf.name_scope('loss'):
 
-            hm_loss = tf.nn.sigmoid_cross_entropy_with_logits(
+            hm_loss = tf.nn.softmax_cross_entropy_with_logits(
                 logits=self.output,
                 labels=self.gtMaps
             )
@@ -94,7 +94,7 @@ class HourglassModel:
                 labels=self.gtDomain
             )
 
-            hm_loss2 = tf.norm(
+            hm_loss2 = 0.5*tf.norm(
                 tensor=self.output-self.gtMaps
             )
 
@@ -108,7 +108,7 @@ class HourglassModel:
             self.domain_loss = tf.reduce_mean(domain_loss)
 
 
-            self.loss = tf.reduce_mean(hm_loss2, name='cross_entropy_heatmap_loss') + tf.reduce_mean(domain_loss, name='cross_entropy_domain_loss')
+            self.loss = tf.reduce_mean(hm_loss, name='cross_entropy_heatmap_loss') + tf.reduce_mean(domain_loss, name='cross_entropy_domain_loss')
 
         lossTime = time.time()
         print('---Loss : Done (' + str(int(abs(graphTime - lossTime))) + ' sec.)')
