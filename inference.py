@@ -152,10 +152,10 @@ class Inference():
 				
 
 if __name__ == '__main__':
-	infer=Inference(config_file = 'config.cfg', model = '../trained_networks/hg_test_41_40', yoloModel = 'YOLO_small.ckpt')
-	val_path='../datasets/val_new'
-	result_path='../datasets/val_new_result'
-# 	val_path='datasets/val'
+	infer=Inference(config_file = 'config.cfg', model = '../trained_networks/hg_test_42_200', yoloModel = 'YOLO_small.ckpt')
+	val_path='../datasets/val_demo'
+	result_path='../datasets/val_demo_result'
+# 	val_path='datasets/val
 # 	result_path='datasets/val_result'
 	val_list=os.listdir(val_path)
 	for file in val_list:
