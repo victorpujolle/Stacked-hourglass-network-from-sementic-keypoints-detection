@@ -94,9 +94,8 @@ class HourglassModel:
                 labels=self.gtDomain
             )
 
-            hm_loss2 = tf.losses.mean_squared_error(
-                labels=self.gtMaps,
-                predictions=self.output
+            hm_loss2 = 0.5*tf.norm(
+                tensor=self.gtMaps-self.output
             )
 
             # gamma implemantation
@@ -308,6 +307,7 @@ class HourglassModel:
             print('  Training Time: ' + str(datetime.timedelta(seconds=time.time() - startTime)))
 
         self.Session.close()
+
 
     def _accuracy_computation(self):
         """Compute the accuracy tensor
