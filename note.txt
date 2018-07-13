@@ -36,3 +36,5 @@ hg_test_40 : try to see if cross entropy is a better loss function
 hg_test_40 : tf.nn.sigmoid_cross_entropy -> tf.nn.softmax_cross_entropy : nan everywhere so evaluation is impossible but it works on the video pretty well and it is stable
 hg_test_41 : tf.nn.sigmoid cross entropy : the training set all_plus is not good because if the label are 0 the net is trained to predict every key points at the POSITION 0
 hg_test_42 : try with softmax_cross_entropy one a correct dataset (train_all) : the net diverged
+
+I will try to modify the network to add a feature classifier able for know to tell if there is somethink we want to detect or not

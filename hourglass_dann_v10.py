@@ -103,11 +103,6 @@ class HourglassModel:
             #hm_loss = (hm_loss - (1 - gamma) * (1 - tf.reshape(self.gtDomain, [4, 1, 1, 1, 1])) * hm_loss) * (1 + gamma) / (2 * gamma)
             #domain_loss = (domain_loss - (1 - gamma) * (1 - self.gtDomain) * domain_loss) * (1 + gamma) / (2 * gamma)
 
-            self.hm_loss = tf.reduce_mean(hm_loss)
-            self.hm_loss2 = tf.reduce_mean(hm_loss2)
-            self.domain_loss = tf.reduce_mean(domain_loss)
-
-
             self.loss = tf.reduce_mean(hm_loss2, name='cross_entropy_heatmap_loss') + tf.reduce_mean(domain_loss, name='cross_entropy_domain_loss')
 
         lossTime = time.time()
@@ -247,8 +242,8 @@ class HourglassModel:
                         self.train_summary.flush()
 
                     else:
-                        _, c, hm_loss, hm_loss2, domain_loss = self.Session.run(
-                            [self.train_rmsprop, self.loss,self.hm_loss, self.hm_loss2,self.domain_loss],
+                        _, c, = self.Session.run(
+                            [self.train_rmsprop, self.loss],
                             feed_dict={self.img: img_train, self.gtMaps: gt_train,
                             self.gtDomain: gt_domain}
                         )
