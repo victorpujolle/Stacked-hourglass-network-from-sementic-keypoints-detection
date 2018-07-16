@@ -31,10 +31,10 @@ hg_test_38 : 3 layers, relu activation function to add some non linearity : the 
 hg_test_38 : 2 layers, relu activation : the results are worse than before
 hg_test_39 : 3 layers, relu, dropout : not so bad but less efficient that the 3 layers without relu
 hg_test_39 : 3 layers, dropout, no activation : the network overcome the others
-hg_test_40 : training one the data_all_plus where there is image without the box : performs good but extremelly unstable
+hg_test_40 : training one the data_all_plus where there is image without the box : performs good but extremelly unstable -> the training set was not well configurated
 hg_test_40 : try to see if cross entropy is a better loss function
 hg_test_40 : tf.nn.sigmoid_cross_entropy -> tf.nn.softmax_cross_entropy : nan everywhere so evaluation is impossible but it works on the video pretty well and it is stable
 hg_test_41 : tf.nn.sigmoid cross entropy : the training set all_plus is not good because if the label are 0 the net is trained to predict every key points at the POSITION 0
 hg_test_42 : try with softmax_cross_entropy one a correct dataset (train_all) : the net diverged
 
-I will try to modify the network to add a feature classifier able for know to tell if there is somethink we want to detect or not
+hg_test_42 : trained on train_all _plus : does work well, this training set reduce drastically the accuracy. The network is able the evoid key point on the nutella box but it is now enable to find all the key points of the cheezit with the precedente accuracy.
