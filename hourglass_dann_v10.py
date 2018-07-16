@@ -99,11 +99,11 @@ class HourglassModel:
             )
 
             # gamma implemantation
-            #gamma = 0.1
-            #hm_loss = (hm_loss - (1 - gamma) * (1 - tf.reshape(self.gtDomain, [4, 1, 1, 1, 1])) * hm_loss) * (1 + gamma) / (2 * gamma)
-            #domain_loss = (domain_loss - (1 - gamma) * (1 - self.gtDomain) * domain_loss) * (1 + gamma) / (2 * gamma)
+            gamma = 0.1
+            hm_loss2 = (hm_loss2 - (1 - gamma) * (1 - tf.reshape(self.gtDomain, [4, 1, 1, 1, 1])) * hm_loss2) * (1 + gamma) / (2 * gamma)
+            domain_loss = (domain_loss - (1 - gamma) * (1 - self.gtDomain) * domain_loss) * (1 + gamma) / (2 * gamma)
 
-            self.loss = tf.reduce_mean(hm_loss2, name='cross_entropy_heatmap_loss') + tf.reduce_mean(domain_loss, name='cross_entropy_domain_loss')
+            self.loss = tf.reduce_mean(hm_loss2, name='l2_heatmap_loss') + tf.reduce_mean(domain_loss, name='cross_entropy_domain_loss')
 
         lossTime = time.time()
         print('---Loss : Done (' + str(int(abs(graphTime - lossTime))) + ' sec.)')
@@ -409,14 +409,14 @@ class HourglassModel:
                 r3 = self._residual(r2, numOut=self.nFeat, name='r3')
 
             # Storage Table
-            hg = [None] * self.nStack   # hourglass net
-            ll = [None] * self.nStack   # convolutional net
-            ll_ = [None] * self.nStack  # convolutional net
-            drop = [None] * self.nStack # dropout layer
-            out = [None] * self.nStack  # output layer
-            out_ = [None] * self.nStack # output layer
-            sum_ = [None] * self.nStack # summation of out_, ll and sum[i-1]
-            domain = [None] * self.nStack
+            hg = [None] * self.nStack     # hourglass net
+            ll = [None] * self.nStack     # convolutional net
+            ll_ = [None] * self.nStack    # convolutional net
+            drop = [None] * self.nStack   # dropout layer
+            out = [None] * self.nStack    # output layer
+            out_ = [None] * self.nStack   # output layer
+            sum_ = [None] * self.nStack   # summation of out_, ll and sum[i-1]
+            domain = [None] * self.nStack # the domain input
 
             with tf.name_scope('stacks'):
                 with tf.name_scope('stack_0'):
@@ -467,30 +467,10 @@ class HourglassModel:
                 stack_out = tf.layers.flatten(tf.stack(out, axis=1))
                 flipped = flip_gradient(stack_out)
 
-                dense1 = tf.layers.dense(
-                    inputs=flipped,
-                    units=1024,
-                    activation=None
-                )
-
-                dropout1 = tf.layers.dropout(
-                    inputs=dense1,
-                    rate=0.4
-                )
-
-                dense2 = tf.layers.dense(
-                    inputs=dropout1,
-                    units=1024,
-                    activation=None
-                )
-
-                dropout2 = tf.layers.dropout(
-                    inputs=dense2,
-                    rate=0.4
-                )
+                domain_class = self._dense_drop(inputs=flipped, units=1024, activation=None, dropout_rate=0.4, n=3)
 
                 domain_logits= tf.nn.sigmoid(tf.contrib.layers.fully_connected(
-                    inputs=dropout2,
+                    inputs=domain_class,
                     num_outputs=1,
                 ))
 
@@ -532,6 +512,30 @@ class HourglassModel:
                 if load is not None:
                     self.saver.restore(self.Session, load)
                 self._train(nEpochs, epochSize, saveStep, validIter=10)
+
+
+    def _dense_drop(self, inputs, units, activation, dropout_rate, n, name='dense_dropout_block'):
+        """dense with dropout block
+        Args:
+            inputs: Input Tensor
+            dropout_rate: dropout rate
+            n: number of layers
+            name: Name of the block
+        """
+
+
+        with tf.name_scope(name):
+            # first dense layer
+            dense1 = tf.layers.dense(inputs=inputs, units=units, activation=activation)
+            # first drop layer
+            dropout1 = tf.layers.dropout(inputs=dense1, rate=dropout_rate)
+
+            if n == 0:
+                return dropout1
+            else:
+                return self._dense_drop(inputs=dropout1,units=units, activation=activation, dropout_rate=dropout_rate, n=n-1)
+
+
 
 
     def _hourglass(self, inputs, n, numOut, name='hourglass'):
