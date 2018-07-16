@@ -140,8 +140,15 @@ class DataGenerator():
                 for i in range(joints.shape[0]):
                     if np.array_equal(joints[i], [-1,-1]):
                         w[i] = 0
-                self.data_dict[name] = {'box' : box, 'joints' : joints, 'weights' : w}
-                self.train_table.append(name)
+
+                #if all box and joint are 0, there is no object and data_dict[name] should be zero
+                if np.amax(box) == 0 and np.amax(joints) == 0:
+                    w = [0] * joints.shape[0]
+                    self.data_dict[name] = {'box': box, 'joints': joints, 'weights': w}
+                    self.train_table.append(name)
+                else:
+                    self.data_dict[name] = {'box' : box, 'joints' : joints, 'weights' : w}
+                    self.train_table.append(name)
         input_file.close()
     
     def _randomize(self):

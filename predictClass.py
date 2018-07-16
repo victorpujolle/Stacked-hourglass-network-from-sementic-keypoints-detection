@@ -31,7 +31,7 @@ Abstract:
 import sys
 sys.path.append('./')
 
-from hourglass_tiny_vic import HourglassModel
+from hourglassdann_v20 import HourglassModel
 from time import time, clock, sleep
 import numpy as np
 import tensorflow as tf
