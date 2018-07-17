@@ -38,3 +38,9 @@ hg_test_41 : tf.nn.sigmoid cross entropy : the training set all_plus is not good
 hg_test_42 : try with softmax_cross_entropy one a correct dataset (train_all) : the net diverged
 
 hg_test_42 : trained on train_all _plus : does work well, this training set reduce drastically the accuracy. The network is able the evoid key point on the nutella box but it is now enable to find all the key points of the cheezit with the precedente accuracy.
+
+on train_all, based on the accuracy mesurement of val_new, the domain classifier with this option seems to perform well self._dense_drop(inputs=dropout1,units=1024, activation=None, dropout_rate=0.4, n=3)
+
+hg_test_43 : we will compare the to mesure (cross entropy and l2)
+hg_test_43 : dr = 0.25, dr_domain = 0.4, lr = 0.001 : results are really good, but not on the video
+hg_tesT_44 : activation=relu, n=4
