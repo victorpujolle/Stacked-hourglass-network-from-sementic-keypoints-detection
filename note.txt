@@ -43,4 +43,7 @@ on train_all, based on the accuracy mesurement of val_new, the domain classifier
 
 hg_test_43 : we will compare the to mesure (cross entropy and l2)
 hg_test_43 : dr = 0.25, dr_domain = 0.4, lr = 0.001 : results are really good, but not on the video
-hg_tesT_44 : activation=relu, n=4
+hg_test_44 : activation=relu, n=4
+hg_test_45 : activation=relu, n=3
+hg_test_46 : activation=None, n=4
+hg_test_47 : non dann to mesure difference

@@ -98,11 +98,11 @@ class HourglassModel:
             )
 
             # gamma implemantation
-            gamma = 0.1
-            hm_loss2 = (hm_loss2 - (1 - gamma) * (1 - tf.reshape(self.gtDomain, [4, 1, 1, 1, 1])) * hm_loss2) * (1 + gamma) / (2 * gamma)
-            domain_loss = (domain_loss - (1 - gamma) * (1 - self.gtDomain) * domain_loss) * (1 + gamma) / (2 * gamma)
+            #gamma = 0.1
+            #hm_loss2 = (hm_loss2 - (1 - gamma) * (1 - tf.reshape(self.gtDomain, [4, 1, 1, 1, 1])) * hm_loss2) * (1 + gamma) / (2 * gamma)
+            #domain_loss = (domain_loss - (1 - gamma) * (1 - self.gtDomain) * domain_loss) * (1 + gamma) / (2 * gamma)
 
-            self.loss = tf.reduce_mean(hm_loss, name='cross_entropy_heatmap_loss') + tf.reduce_mean(domain_loss, name='cross_entropy_domain_loss')
+            self.loss = tf.reduce_mean(hm_loss, name='cross_entropy_heatmap_loss') #+ tf.reduce_mean(domain_loss, name='cross_entropy_domain_loss')
 
         lossTime = time.time()
         print('---Loss : Done (' + str(int(abs(graphTime - lossTime))) + ' sec.)')
@@ -466,7 +466,7 @@ class HourglassModel:
                 stack_out = tf.layers.flatten(tf.stack(out, axis=1))
                 flipped = flip_gradient(stack_out)
 
-                domain_class = self._dense_drop(inputs=flipped, units=1024, activation=tf.nn.relu, dropout_rate=0.4, n=3)
+                domain_class = self._dense_drop(inputs=flipped, units=1024, activation=None, dropout_rate=0.2, n=3)
 
                 domain_logits= tf.nn.sigmoid(tf.contrib.layers.fully_connected(
                     inputs=domain_class,
@@ -533,8 +533,6 @@ class HourglassModel:
                 return dropout1
             else:
                 return self._dense_drop(inputs=dropout1,units=units, activation=activation, dropout_rate=dropout_rate, n=n-1)
-
-
 
 
     def _hourglass(self, inputs, n, numOut, name='hourglass'):
